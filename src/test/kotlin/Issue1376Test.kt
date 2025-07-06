@@ -91,4 +91,60 @@ class Issue1376Test {
             actual = response.status,
         )
     }
+
+    @Test
+    fun `singlePageApp with a path prefix should not load on a different path`() {
+        val subject = routes(
+            "/api/info" bind Method.GET to { Response(Status.OK).body("ISSUE 1376") },
+            "/dashboard" bind singlePageApp(ResourceLoader.Classpath("dashboard")),
+        )
+        val response = subject(Request(Method.GET, "/pizza"))
+        assertEquals(
+            expected = Status.NOT_FOUND,
+            actual = response.status,
+        )
+    }
+
+    @Test
+    fun `singlePageApp with a base path should load an index dot html, implicitly`() {
+        val subject = routes(
+            "/api/info" bind Method.GET to { Response(Status.OK).body("ISSUE 1376") },
+            singlePageApp(ResourceLoader.Classpath("dashboard")).withBasePath("/dashboard"),
+        )
+        val response = subject(Request(Method.GET, "/dashboard"))
+        assertEquals(
+            expected = Status.OK,
+            actual = response.status,
+        )
+        assertTrue {
+            response.bodyString()
+                .contains("<h1>Hello, World!</h1>")
+        }
+    }
+
+    @Test
+    fun `singlePageApp with a base path should not load on the root path`() {
+        val subject = routes(
+            "/api/info" bind Method.GET to { Response(Status.OK).body("ISSUE 1376") },
+            singlePageApp(ResourceLoader.Classpath("dashboard")).withBasePath("/dashboard"),
+        )
+        val response = subject(Request(Method.GET, "/"))
+        assertEquals(
+            expected = Status.NOT_FOUND,
+            actual = response.status,
+        )
+    }
+
+    @Test
+    fun `singlePageApp with a base path should not load on a different path`() {
+        val subject = routes(
+            "/api/info" bind Method.GET to { Response(Status.OK).body("ISSUE 1376") },
+            singlePageApp(ResourceLoader.Classpath("dashboard")).withBasePath("/dashboard"),
+        )
+        val response = subject(Request(Method.GET, "/pizza"))
+        assertEquals(
+            expected = Status.NOT_FOUND,
+            actual = response.status,
+        )
+    }
 }
