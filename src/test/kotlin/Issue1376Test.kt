@@ -1,16 +1,22 @@
-import com.example.issue1376routes
 import org.http4k.core.Method
 import org.http4k.core.Request
+import org.http4k.core.Response
 import org.http4k.core.Status
+import org.http4k.routing.ResourceLoader
+import org.http4k.routing.bind
+import org.http4k.routing.routes
+import org.http4k.routing.singlePageApp
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class Issue1376Test {
-    val subject = issue1376routes
-
     @Test
     fun `non-spa routes defined before singlePageApp should match`() {
+        val subject = routes(
+            "/api/info" bind Method.GET to { Response(Status.OK).body("ISSUE 1376") },
+            "/dashboard" bind singlePageApp(ResourceLoader.Classpath("dashboard")),
+        )
         val response = subject(Request(Method.GET, "/api/info"))
         assertEquals(
             expected = Status.OK,
@@ -24,6 +30,10 @@ class Issue1376Test {
 
     @Test
     fun `singlePageApp with a path prefix should load an index dot html, implicitly`() {
+        val subject = routes(
+            "/api/info" bind Method.GET to { Response(Status.OK).body("ISSUE 1376") },
+            "/dashboard" bind singlePageApp(ResourceLoader.Classpath("dashboard")),
+        )
         val response = subject(Request(Method.GET, "/dashboard"))
         assertEquals(
             expected = Status.OK,
@@ -37,6 +47,10 @@ class Issue1376Test {
 
     @Test
     fun `singlePageApp with a path prefix should load an index dot html, explicitly`() {
+        val subject = routes(
+            "/api/info" bind Method.GET to { Response(Status.OK).body("ISSUE 1376") },
+            "/dashboard" bind singlePageApp(ResourceLoader.Classpath("dashboard")),
+        )
         val response = subject(Request(Method.GET, "/dashboard/index.html"))
         assertEquals(
             expected = Status.OK,
@@ -50,6 +64,10 @@ class Issue1376Test {
 
     @Test
     fun `singlePageApp with a path prefix should load other resources, explicitly`() {
+        val subject = routes(
+            "/api/info" bind Method.GET to { Response(Status.OK).body("ISSUE 1376") },
+            "/dashboard" bind singlePageApp(ResourceLoader.Classpath("dashboard")),
+        )
         val response = subject(Request(Method.GET, "/dashboard/main.css"))
         assertEquals(
             expected = Status.OK,
@@ -62,7 +80,11 @@ class Issue1376Test {
     }
 
     @Test
-    fun `singlePageApp with a path prefix should not load outside the path prefix`() {
+    fun `singlePageApp with a path prefix should not load on the root path`() {
+        val subject = routes(
+            "/api/info" bind Method.GET to { Response(Status.OK).body("ISSUE 1376") },
+            "/dashboard" bind singlePageApp(ResourceLoader.Classpath("dashboard")),
+        )
         val response = subject(Request(Method.GET, "/"))
         assertEquals(
             expected = Status.NOT_FOUND,
