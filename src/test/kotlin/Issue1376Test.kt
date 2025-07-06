@@ -7,8 +7,8 @@ import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.routing.singlePageApp
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class Issue1376Test {
     @Test
@@ -39,10 +39,10 @@ class Issue1376Test {
             expected = Status.OK,
             actual = response.status,
         )
-        assertTrue {
-            response.bodyString()
-                .contains("<h1>Hello, World!</h1>")
-        }
+        assertContains(
+            charSequence = response.bodyString(),
+            other = "<h1>Hello, World!</h1>",
+        )
     }
 
     @Test
@@ -56,10 +56,10 @@ class Issue1376Test {
             expected = Status.OK,
             actual = response.status,
         )
-        assertTrue {
-            response.bodyString()
-                .contains("<h1>Hello, World!</h1>")
-        }
+        assertContains(
+            charSequence = response.bodyString(),
+            other = "<h1>Hello, World!</h1>",
+        )
     }
 
     @Test
@@ -73,10 +73,10 @@ class Issue1376Test {
             expected = Status.OK,
             actual = response.status,
         )
-        assertTrue {
-            response.bodyString()
-                .contains("background-color: bisque;")
-        }
+        assertContains(
+            charSequence = response.bodyString(),
+            other = "background-color: bisque;",
+        )
     }
 
     @Test
@@ -116,10 +116,10 @@ class Issue1376Test {
             expected = Status.OK,
             actual = response.status,
         )
-        assertTrue {
-            response.bodyString()
-                .contains("<h1>Hello, World!</h1>")
-        }
+        assertContains(
+            charSequence = response.bodyString(),
+            other = "<h1>Hello, World!</h1>",
+        )
     }
 
     @Test
