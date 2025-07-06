@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "2.1.21"
+    alias(libs.plugins.kotlin.jvm)
 }
 
 group = "com.example"
@@ -10,7 +10,8 @@ repositories {
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
+    implementation(libs.http4k.core)
+    testImplementation(libs.kotlin.test)
 }
 
 tasks.test {

@@ -1,0 +1,10 @@
+[versions]
+kotlin = "2.2.0" # https://github.com/JetBrains/kotlin/releases/latest
+http4k = "6.15.0.1" # https://github.com/http4k/http4k/releases
+
+[libraries]
+http4k-core = { module = "org.http4k:http4k-core", version.ref = "http4k" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
